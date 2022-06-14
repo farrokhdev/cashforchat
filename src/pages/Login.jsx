@@ -29,7 +29,9 @@ const Login = () => {
       );
     } catch (err) {
       console.log(err);
-      message.error(error.message);
+      message.error(
+        error?.message ? error?.message : "خطا در ورود مجدد تلاش کنید"
+      );
     }
   };
 

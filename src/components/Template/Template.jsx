@@ -15,7 +15,7 @@ import {
 import Logo from "../../assets/images/icon/logo.png";
 
 import { Button, Layout, Menu } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import useAuthContext from "../../Context/authContext";
 import TokenManager from "../../lib/tokenManager";
 const { Header, Sider, Content } = Layout;
@@ -27,6 +27,9 @@ export const Template = ({ children }) => {
   const logOutAdmin = () => {
     TokenManager.removeToken();
   };
+
+  const location = useLocation();
+  console.log(location);
 
   return (
     <Layout className="costum-template">
@@ -48,26 +51,71 @@ export const Template = ({ children }) => {
           </h1>
         </div>
 
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          <Menu.Item key="1" icon={<DashboardOutlined />}>
+        <Menu
+          theme="dark"
+          mode="inline"
+
+          // defaultSelectedKeys={["1"]}
+        >
+          <Menu.Item
+            className={
+              location?.pathname === "/" ? "ant-menu-item-selected" : ""
+            }
+            key="1"
+            icon={<DashboardOutlined />}
+          >
             <Link to="/">داشبرد</Link>
           </Menu.Item>
-          <Menu.Item key="2" icon={<UsergroupAddOutlined />}>
+          <Menu.Item
+            className={
+              location?.pathname === "/users" ? "ant-menu-item-selected" : ""
+            }
+            key="2"
+            icon={<UsergroupAddOutlined />}
+          >
             <Link to="/users">مدیریت کاربران</Link>
           </Menu.Item>
-          <Menu.Item key="3" icon={<DropboxOutlined />}>
+          <Menu.Item
+            className={
+              location?.pathname === "/user-categories"
+                ? "ant-menu-item-selected"
+                : ""
+            }
+            key="3"
+            icon={<DropboxOutlined />}
+          >
             <Link to="/user-categories">دسته بندی کاربران</Link>
           </Menu.Item>
-          <Menu.Item key="4" icon={<TransactionOutlined />}>
+          <Menu.Item
+            className={
+              location?.pathname === "/payments" ? "ant-menu-item-selected" : ""
+            }
+            key="4"
+            icon={<TransactionOutlined />}
+          >
             <Link to="/payments">تراکنش ها</Link>
           </Menu.Item>
-          <Menu.Item key="5" icon={<PhoneOutlined />}>
+          <Menu.Item
+            className={
+              location?.pathname === "/user-calls"
+                ? "ant-menu-item-selected"
+                : ""
+            }
+            key="5"
+            icon={<PhoneOutlined />}
+          >
             <Link to="/user-calls">تماس های کاربران</Link>
           </Menu.Item>
           {/* <Menu.Item key="6" icon={<PhoneOutlined />}>
             <Link to="/settlement-requests">درخواست تسویه</Link>
           </Menu.Item> */}
-          <Menu.Item key="7" icon={<UsergroupAddOutlined />}>
+          <Menu.Item
+            className={
+              location?.pathname === "/admins" ? "ant-menu-item-selected" : ""
+            }
+            key="7"
+            icon={<UsergroupAddOutlined />}
+          >
             <Link to="/admins">مدیران</Link>
           </Menu.Item>
         </Menu>

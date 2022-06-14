@@ -3,13 +3,13 @@ import { Button, Form, Input, InputNumber } from "antd";
 import Password from "antd/lib/input/Password";
 
 const validateMessages = {
-  required: "${label} is required!",
+  required: "${label} پر کردن این فیلد ضروری میباشد!",
   types: {
-    email: "${label} is not a valid email!",
-    number: "${label} is not a valid number!",
+    email: "${label} ایمیل معتبر نمیباشد!",
+    number: "${label} شماره تلفن معتبر نیست!",
   },
   number: {
-    range: "${label} must be between ${min} and ${max}",
+    range: "${label} باید بین ${min} و ${max} باشد",
   },
 };
 
@@ -58,7 +58,6 @@ export const AddAdminForm = ({ onFinish }) => {
         label="کلمه عبور"
         rules={[
           {
-            type: Password,
             required: true,
             min: 8,
           },

@@ -99,7 +99,9 @@ export const UsersComp = () => {
             <Typography.Link>
               <Popconfirm
                 onConfirm={() => remove(record)}
-                title="?Sure to DELETE"
+                title="آیا مطمئن هستید؟"
+                okText={"حذف"}
+                cancelText={"انصراف"}
               >
                 <DeleteOutlined />
               </Popconfirm>
@@ -125,7 +127,11 @@ export const UsersComp = () => {
       });
     } catch (err) {
       console.log(err);
-      message.error(deleteError.message);
+      message.error(
+        deleteError?.message
+          ? deleteError?.message
+          : "حذف کاربر با مشکل مواجه شد دوباره تلاش کنید"
+      );
     }
   };
 

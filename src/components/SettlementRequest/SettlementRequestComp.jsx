@@ -145,7 +145,8 @@ export const SettlementRequestComp = () => {
     //         >
     //           Save
     //         </Typography.Link>
-    //         <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+    //         <Popconfirm title="Sure to cancel?" onConfirm={cancel}  okText={"حذف"}
+    // cancelText={"انصراف"}>
     //           <a>Cancel</a>
     //         </Popconfirm>
     //       </span>

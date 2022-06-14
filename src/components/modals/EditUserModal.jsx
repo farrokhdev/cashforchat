@@ -13,16 +13,16 @@ const EditUserModal = ({ editModal, showModal, hideModal, children }) => {
         onCancel={hideModal}
         footer={[
           <>
-            <Button type="primary" onClick={hideModal}>
-              cancel
-            </Button>
             <Button
               type="primary"
               form="edit-user"
               key="submit"
               htmlType="submit"
             >
-              ok
+              ثبت
+            </Button>
+            <Button type="primary" onClick={hideModal}>
+              انصراف
             </Button>
           </>,
         ]}

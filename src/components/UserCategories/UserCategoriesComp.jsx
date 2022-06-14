@@ -99,7 +99,9 @@ export const UserCategoriesComp = () => {
             <Typography.Link>
               <Popconfirm
                 onConfirm={() => remove(record)}
-                title="?Sure to DELETE"
+                title="آیا مطمئن هستید؟"
+                okText={"حذف"}
+                cancelText={"انصراف"}
               >
                 <DeleteOutlined />
               </Popconfirm>
@@ -126,7 +128,9 @@ export const UserCategoriesComp = () => {
       });
     } catch (err) {
       console.log(err);
-      message.error("erro");
+      message.error(
+        deleteError?.message ? deleteError?.message : "حذف با خطا مواجه شد"
+      );
     }
   };
 

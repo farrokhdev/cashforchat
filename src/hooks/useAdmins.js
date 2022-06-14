@@ -7,6 +7,7 @@ export const GET_Admins = gql`
       username
       name
       family
+      phoneNumber
       _id
     }
   }
@@ -144,6 +145,7 @@ export const EditAdmin = gql`
       _id
       username
       phoneNumber
+      password
       status
     }
   }

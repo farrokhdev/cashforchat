@@ -12,19 +12,20 @@ const validateMessages = {
   },
 };
 
-export const AddUserForm = ({ onFinish }) => {
+export const SearchUserForm = ({ onFinish }) => {
   return (
     <Form
-      name="add-user"
+      name="search-user"
       onFinish={onFinish}
       validateMessages={validateMessages}
+      className="flex-row-center gap-10"
     >
       <Form.Item
         name={"username"}
         label="نام کاربری"
         rules={[
           {
-            required: true,
+            // required: true,
           },
         ]}
       >
@@ -35,7 +36,7 @@ export const AddUserForm = ({ onFinish }) => {
         label="نام کامل"
         rules={[
           {
-            required: true,
+            // required: true,
           },
         ]}
       >
@@ -46,7 +47,7 @@ export const AddUserForm = ({ onFinish }) => {
         label="شماره تماس"
         rules={[
           {
-            required: true,
+            // required: true,
             min: 0,
             max: 11,
           },
@@ -55,11 +56,11 @@ export const AddUserForm = ({ onFinish }) => {
         <Input />
       </Form.Item>
 
-      {/* <Form.Item>
+      <Form.Item>
         <Button type="primary" htmlType="submit">
-          ثبت
+          فیلتر
         </Button>
-      </Form.Item> */}
+      </Form.Item>
     </Form>
   );
 };

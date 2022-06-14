@@ -18,16 +18,16 @@ const DecreamentWalletModal = ({
         onCancel={closeModal}
         footer={[
           <>
-            <Button type="primary" onClick={closeModal}>
-              cancel
-            </Button>
             <Button
               type="primary"
               form="decreament-update-wallet-form"
               key="submit"
               htmlType="submit"
             >
-              ok
+              ثبت
+            </Button>
+            <Button type="primary" onClick={closeModal}>
+              انصراف
             </Button>
           </>,
         ]}

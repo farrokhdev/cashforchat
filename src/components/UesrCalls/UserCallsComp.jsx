@@ -7,8 +7,8 @@ const UserCallsComp = () => {
   const [form] = Form.useForm();
 
   const { callsData, callsError, callsLoading, refetch } = useListCallLogs();
-  const { singleCallData, singleCallError, singleCallLoading } =
-    useGetCallLog();
+  // const { getCallLogs, singleCallData, singleCallError, singleCallLoading } =
+  //   useGetCallLog();
 
   const callsList = callsData?.listCallLogs;
 
@@ -16,21 +16,21 @@ const UserCallsComp = () => {
     {
       title: "وضعیت ",
       dataIndex: "status",
-      width: "40%",
+      width: "50%",
       editable: true,
       align: "center",
     },
-    {
-      title: "تماس گیرنده ",
-      dataIndex: "caller",
-      width: "40%",
-      editable: true,
-      align: "center",
-    },
+    // {
+    //   title: "تماس گیرنده ",
+    //   dataIndex: "caller",
+    //   width: "40%",
+    //   editable: true,
+    //   align: "center",
+    // },
     {
       title: "رزرو شده ",
       dataIndex: "isReserved",
-      width: "20%",
+      width: "50%",
       align: "center",
       render: (_, record) => {
         return (

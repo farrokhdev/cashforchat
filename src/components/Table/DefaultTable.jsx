@@ -16,6 +16,7 @@ const DefaultTable = ({
   return (
     <Form form={form} component={false}>
       <Table
+        className="custom-table"
         locale={{
           emptyText: "دیتایی موجود نیست",
         }}

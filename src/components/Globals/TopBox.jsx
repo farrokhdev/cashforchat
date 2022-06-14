@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Input, Dropdown, Menu, Space, message } from "antd";
 import AddUserModal from "../modals/AddUserModal";
 import { AddUserForm } from "../Forms/AddUserForm";
+import { SearchUserForm } from "../Forms/SearchUserForm";
 
 const { Search } = Input;
 
@@ -25,12 +26,19 @@ export const TopBox = ({
 
   const onSearch = (value) => {
     try {
-      filterUsers({ variables: { filters: { fullName: value } } }).then(() =>
-        refetch()
-      );
+      filterUsers({
+        variables: {
+          filters: {
+            username: value.username,
+            fullName: value.fullName,
+            phoneNumber: value.phoneNumber,
+            createdAt: value.createdAt,
+          },
+        },
+      }).then(() => refetch());
     } catch (err) {
       if (error) {
-        message.error(error ? error.message : "error");
+        message.error(error?.message ? error?.message : "خطا مجددا تلاش کنید");
       }
     }
   };
@@ -50,7 +58,7 @@ export const TopBox = ({
       });
     } catch (err) {
       console.log(err);
-      message.error(error.message);
+      message.error(error?.message ? error?.message : "خطا مجددا تلاش کنید");
     }
   };
   return (
@@ -62,7 +70,9 @@ export const TopBox = ({
       {/* ADD USER MODAL END */}
       <div className="top-box">
         <div className="search">
-          <Search placeholder={searchText} onSearch={onSearch} enterButton />
+          {/* <Search placeholder={searchText} onSearch={onSearch} enterButton /> */}
+
+          <SearchUserForm onFinish={onSearch} />
         </div>
         <div className="create-btn">
           <Button type="primary" onClick={showModal}>

@@ -7,6 +7,7 @@ import { ConfigProvider } from "antd";
 import "antd/dist/antd.css";
 import { ApolloProvider, gql } from "@apollo/client";
 import { client } from "./lib/tokenManager";
+import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -31,11 +32,13 @@ window.addEventListener("hashchange", forceSlashAfterHash);
 
 root.render(
   <React.StrictMode>
+    {/* <Provider store={""}> */}
     <ApolloProvider client={client}>
       <ConfigProvider direction="rtl">
         <App />
       </ConfigProvider>
     </ApolloProvider>
+    {/* </Provider> */}
   </React.StrictMode>
 );
 

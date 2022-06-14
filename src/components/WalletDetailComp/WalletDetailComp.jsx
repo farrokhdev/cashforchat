@@ -44,7 +44,9 @@ export const WalletDetailComp = () => {
       });
     } catch (err) {
       console.log(err);
-      message.error(editError.message);
+      message.error(
+        editError?.message ? editError?.message : "بروزرسانی با خطا مواجه شد"
+      );
     }
   };
 

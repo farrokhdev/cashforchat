@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { Button, Form, Input, InputNumber, message } from "antd";
 
 const validateMessages = {
-  required: "${label} is required!",
+  required: "${label} پر کردن این فیلد ضروری میباشد!",
   types: {
-    email: "${label} is not a valid email!",
-    number: "${label} is not a valid number!",
+    email: "${label} ایمیل معتبر نمیباشد!",
+    number: "${label} شماره تلفن معتبر نیست!",
   },
   number: {
-    range: "${label} must be between ${min} and ${max}",
+    range: "${label} باید بین ${min} و ${max} باشد",
   },
 };
 
@@ -45,6 +45,7 @@ export const EditAdminForm = ({
           username: value.username,
           name: value.name,
           family: value.family,
+          password: value.password,
           phoneNumber: value.phoneNumber,
         },
       }).then(() => {
@@ -54,7 +55,11 @@ export const EditAdminForm = ({
       });
     } catch (err) {
       console.log(err);
-      message.error(editError.message);
+      message.error(
+        editError?.message
+          ? editError?.message
+          : "بروزرسانی با خطلا مواجه شد مجددا تلاش کنید"
+      );
     }
   };
 
@@ -103,7 +108,18 @@ export const EditAdminForm = ({
       >
         <Input />
       </Form.Item>
-
+      <Form.Item
+        name={"password"}
+        label="کلمه عبور"
+        rules={[
+          {
+            required: true,
+            min: 8,
+          },
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
       <Form.Item
         name={"phoneNumber"}
         label="شماره تماس"

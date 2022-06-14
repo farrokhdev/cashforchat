@@ -53,11 +53,25 @@ export const AdminsComp = () => {
   // TABLE COLUMN
   const columns = [
     {
-      title: "نام ",
-      dataIndex: "name",
+      title: "نام و نام خانوادگی",
+      // dataIndex: "name",
       width: "15%",
       editable: true,
       align: "center",
+      render: (_, record) => {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <span>{record?.username}</span>
+            <span>{record?.family}</span>
+          </div>
+        );
+      },
     },
     {
       title: "نام کاربری",
@@ -66,16 +80,16 @@ export const AdminsComp = () => {
       editable: true,
       align: "center",
     },
-    {
-      title: " نام خانوادگی",
-      dataIndex: "family",
-      width: "15%",
-      editable: true,
-      align: "center",
-    },
+    // {
+    //   title: " نام خانوادگی",
+    //   dataIndex: "family",
+    //   width: "15%",
+    //   editable: true,
+    //   align: "center",
+    // },
     {
       title: "شماره تماس",
-      dataIndex: "phone number",
+      dataIndex: "phoneNumber",
       width: "15%",
       editable: true,
       align: "center",
@@ -101,7 +115,9 @@ export const AdminsComp = () => {
             <Typography.Link>
               <Popconfirm
                 onConfirm={() => remove(record)}
-                title="?Sure to DELETE"
+                title="آیا مطمئن هستید؟"
+                okText={"حذف"}
+                cancelText={"انصراف"}
               >
                 <DeleteOutlined />
               </Popconfirm>
@@ -128,7 +144,11 @@ export const AdminsComp = () => {
       });
     } catch (err) {
       console.log(err);
-      message.error("erro");
+      message.error(
+        deleteError?.message
+          ? deleteError?.message
+          : "حذف ادمین با مشکل مواجه شد دوباره تلاش کنید"
+      );
     }
   };
 
