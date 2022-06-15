@@ -18,6 +18,15 @@ import { useNavigate, useParams } from "react-router";
 export const UsersComp = () => {
   // CRUD OPRATIONS
   const { usersData, usersLoading, usersError, refetch } = useGetUsers();
+
+  // useEffect(async () => {
+  //   try {
+  //     await getUsersList();
+  //   } catch (err) {
+  //     await message.error(usersError?.message);
+  //   }
+  // }, []);
+
   const { filterUsers, filterUsersData, filterUsersLoading, filterUsersError } =
     useFilterUsers();
   const { createUser, addData, addLoading, addError } = useAddUser();

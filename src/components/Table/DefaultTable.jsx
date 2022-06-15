@@ -11,7 +11,7 @@ const DefaultTable = ({
   cancel = "",
 }) => {
   if (error) {
-    message.error("خطا در برقراری ارتباط با سرور");
+    message.error(error?.message);
   }
   return (
     <Form form={form} component={false}>

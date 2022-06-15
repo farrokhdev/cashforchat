@@ -6,11 +6,11 @@ export const GET_USERS = gql`
     getUsers {
       fullName
       username
-      phoneNumber
-      wallet
-      rate
-      _id
-      createdAt
+      # phoneNumber
+      # wallet
+      # rate
+      # _id
+      # createdAt
     }
   }
 `;
