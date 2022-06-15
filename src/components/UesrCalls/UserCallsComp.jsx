@@ -16,9 +16,30 @@ const UserCallsComp = () => {
     {
       title: "وضعیت ",
       dataIndex: "status",
-      width: "50%",
+      width: "30%",
       editable: true,
       align: "center",
+    },
+    {
+      title: "مقدار بلاک شده ",
+      dataIndex: "amountBlocked",
+      width: "30%",
+      editable: true,
+      align: "center",
+      render: (_, record) => {
+        console.log(record);
+        return (
+          <span
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
+            {record?.user?.amountBlocked}
+          </span>
+        );
+      },
     },
     // {
     //   title: "تماس گیرنده ",
@@ -30,7 +51,7 @@ const UserCallsComp = () => {
     {
       title: "رزرو شده ",
       dataIndex: "isReserved",
-      width: "50%",
+      width: "40%",
       align: "center",
       render: (_, record) => {
         return (
