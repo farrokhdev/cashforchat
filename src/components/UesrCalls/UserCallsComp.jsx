@@ -1,33 +1,59 @@
 import React from "react";
-import { Form } from "antd";
+import { Form, Tag } from "antd";
 import DefaultTable from "../Table/DefaultTable";
-import { useGetCallLog, useListCallLogs } from "../../hooks/useUserCalls";
+import { useListCallLogs } from "../../hooks/useUserCalls";
 
 const UserCallsComp = () => {
   const [form] = Form.useForm();
 
   const { callsData, callsError, callsLoading, refetch } = useListCallLogs();
-  // const { getCallLogs, singleCallData, singleCallError, singleCallLoading } =
-  //   useGetCallLog();
 
   const callsList = callsData?.listCallLogs;
 
   const columns = [
     {
-      title: "وضعیت ",
-      dataIndex: "status",
-      width: "30%",
+      title: " نام کاربری  ",
+      dataIndex: "username",
+      width: "20%",
       editable: true,
       align: "center",
+      render: (_, record) => {
+        return (
+          <span
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
+            {record?.user?.username}
+          </span>
+        );
+      },
+    },
+    {
+      title: "وضعیت ",
+      dataIndex: "status",
+      width: "20%",
+      editable: true,
+      align: "center",
+      render: (_,record) => {
+        return(
+          <span>
+            {record?.status == "Missed" ? 
+            <Tag color={"red"}>Missed</Tag> :
+            <Tag color={"green"}>Incoming</Tag>}
+          </span>
+        )
+      }
     },
     {
       title: "مقدار بلاک شده ",
       dataIndex: "amountBlocked",
-      width: "30%",
+      width: "20%",
       editable: true,
       align: "center",
       render: (_, record) => {
-        console.log(record);
         return (
           <span
             style={{

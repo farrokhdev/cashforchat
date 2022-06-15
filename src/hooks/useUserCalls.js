@@ -26,28 +26,3 @@ export const useListCallLogs = () => {
   return { callsData, callsError, callsLoading, refetch };
 };
 
-const GET_getCallLog = gql`
-  query getCallLog($id: ID!) {
-    getCallLog {
-      user {
-        username
-        amountBlocked
-      }
-    }
-  }
-`;
-
-export const useGetCallLog = (id) => {
-  const [
-    getCallLogs,
-    {
-      data: singleCallData,
-      error: singleCallError,
-      loading: singleCallLoading,
-    },
-  ] = useLazyQuery(GET_getCallLog, {
-    variables: { id },
-  });
-
-  return { getCallLogs, singleCallData, singleCallError, singleCallLoading };
-};

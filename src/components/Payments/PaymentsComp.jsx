@@ -1,32 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import DefaultTable from "../Table/DefaultTable";
-import { useGetPayment, useGetPayments } from "../../hooks/usePayments";
-import { Form, message, Popconfirm, Typography } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { useGetPayments } from "../../hooks/usePayments";
+import { Form } from "antd";
+
+
+
 
 const PaymentsComp = () => {
   const [form] = Form.useForm();
-  const [id, setId] = useState(null);
 
   const { paymentsError, paymentsData, paymentsLoading, refetch } =
     useGetPayments();
-  const { singlePaymentData, singlePaymentLoading, singlePaymentError } =
-    useGetPayment();
+  
 
   const paymentList = paymentsData?.getPayments;
 
   const columns = [
     {
-      title: "وضعیت ",
-      dataIndex: "status",
-      width: "25%",
+      title: "نام کاربری ",
+      dataIndex: "username",
+      width: "20%",
       editable: true,
       align: "center",
+      render: (_,record) => {
+        return (
+          <span>
+            {record?.userId?.username}
+          </span>
+        )}
     },
     {
-      title: "ID ",
-      dataIndex: "_id",
-      width: "15%",
+      title: "نام کامل ",
+      dataIndex: "fullName",
+      width: "20%",
+      editable: true,
+      align: "center",
+      render: (_,record) => {
+        return (
+          <span>
+            {record?.userId?.fullName}
+          </span>
+        )}
+    },
+    {
+      title: "وضعیت ",
+      dataIndex: "status",
+      width: "20%",
       editable: true,
       align: "center",
     },

@@ -20,11 +20,11 @@ const DefaultTable = ({
         locale={{
           emptyText: "دیتایی موجود نیست",
         }}
-        components={{
-          body: {
-            cell: EditableCell,
-          },
-        }}
+        // components={{
+        //   body: {
+        //     cell: EditableCell,
+        //   },
+        // }}
         bordered
         dataSource={data}
         columns={columns}

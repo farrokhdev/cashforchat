@@ -37,9 +37,9 @@ export const EditAdminForm = ({
     }
   }, [userID]);
 
-  const edit = (value) => {
+  const edit = async (value) => {
     try {
-      update({
+      await update({
         variables: {
           id: userID,
           username: value.username,
@@ -55,11 +55,7 @@ export const EditAdminForm = ({
       });
     } catch (err) {
       console.log(err);
-      message.error(
-        editError?.message
-          ? editError?.message
-          : "بروزرسانی با خطلا مواجه شد مجددا تلاش کنید"
-      );
+      await message.error(editError?.message);
     }
   };
 

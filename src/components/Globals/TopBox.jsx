@@ -31,8 +31,8 @@ export const TopBox = ({
           filters: {
             username: value.username,
             fullName: value.fullName,
-            phoneNumber: value.phoneNumber,
-            createdAt: value.createdAt,
+            // phoneNumber: value.phoneNumber,
+            // createdAt: value.createdAt,
           },
         },
       }).then(() => refetch());

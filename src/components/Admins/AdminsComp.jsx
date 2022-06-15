@@ -80,13 +80,6 @@ export const AdminsComp = () => {
       editable: true,
       align: "center",
     },
-    // {
-    //   title: " نام خانوادگی",
-    //   dataIndex: "family",
-    //   width: "15%",
-    //   editable: true,
-    //   align: "center",
-    // },
     {
       title: "شماره تماس",
       dataIndex: "phoneNumber",
@@ -208,6 +201,8 @@ export const AdminsComp = () => {
         btnText={"ایجاد ادمین جدید"}
         refetch={adminRefetch}
         createAdmin={createAdmin}
+        userID={userID}
+        error={addError}
       />
       <DefaultTable
         form={form}

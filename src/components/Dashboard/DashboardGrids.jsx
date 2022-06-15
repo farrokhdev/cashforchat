@@ -1,3 +1,4 @@
+import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaUsers } from "react-icons/fa";
 import { TbUsers } from "react-icons/tb";
@@ -103,31 +104,45 @@ export const DashboardGrids = () => {
   return (
     <div className="dashboard-box">
       <div className="dashboard-item">
-        <FaUsers className="icon icon-admin" />
-        <div className="count-box">
-          <p> تعداد مدیران</p>
-          <p className="count-item"> 1200</p>
-        </div>
-      </div>
-      <div className="dashboard-item">
         <TbUsers className="icon icon-user" />
         <div className="count-box">
           <p> تعداد کاربران</p>
-          <p className="count-item">{users?.getUsers?.lenth || 0}</p>
+
+          <p className="count-item">
+            {loadingUsers ? (
+              <Spin spinning={loadingUsers} />
+            ) : (
+              users?.getUsers?.lenth || 0
+            )}
+          </p>
         </div>
       </div>
       <div className="dashboard-item">
         <FaUsers className="icon icon-active-user" />
         <div className="count-box">
           <p>تعداد کاربران فعال</p>
-          <p className="count-item"> {usersEnable?.getUsers?.length || 0}</p>
+          <p className="count-item">
+            {" "}
+            {loadingUsers ? (
+              <Spin spinning={loadingUsers} />
+            ) : (
+              usersEnable?.getUsers?.length || 0
+            )}
+          </p>
         </div>
       </div>
       <div className="dashboard-item">
         <FaUsers className="icon icon-deactiveuser" />
         <div className="count-box">
           <p> تعداد کاربران غیر فعال</p>
-          <p className="count-item"> {usersEnable?.getUsers?.length || 0}</p>
+          <p className="count-item">
+            {" "}
+            {loadingUsers ? (
+              <Spin spinning={loadingUsers} />
+            ) : (
+              usersEnable?.getUsers?.length || 0
+            )}
+          </p>
         </div>
       </div>
       <div className="dashboard-item">
@@ -135,7 +150,11 @@ export const DashboardGrids = () => {
         <div className="count-box">
           <p> تعداد تراکنش واریزی</p>
           <p className="count-item">
-            {usersPayments?.getPayments?.length || 0}
+            {loadingUsersPayments ? (
+              <Spin spinning={loadingUsersPayments} />
+            ) : (
+              usersPayments?.getPayments?.length || 0
+            )}
           </p>
         </div>
       </div>
@@ -143,7 +162,14 @@ export const DashboardGrids = () => {
         <FaUsers className="icon icon-count" />
         <div className="count-box">
           <p> جمع مبلغ واریز شده</p>
-          <p className="count-item"> {countDepositAmount || 0}</p>
+          <p className="count-item">
+            {" "}
+            {loadingUsersPayments ? (
+              <Spin spinning={loadingUsersPayments} />
+            ) : (
+              countDepositAmount || 0
+            )}
+          </p>
         </div>
       </div>
       <div className="dashboard-item">
@@ -151,8 +177,11 @@ export const DashboardGrids = () => {
         <div className="count-box">
           <p> تعداد تراکنش برداشتی</p>
           <p className="count-item">
-            {" "}
-            {settlementRequests?.getSettlementRequests?.length || 0}
+            {loadingSettlementRequests ? (
+              <Spin spinning={loadingSettlementRequests} />
+            ) : (
+              settlementRequests?.getSettlementRequests?.length || 0
+            )}
           </p>
         </div>
       </div>
@@ -160,14 +189,27 @@ export const DashboardGrids = () => {
         <FaUsers className="icon icon-count-amount" />
         <div className="count-box">
           <p>جمع مبلغ برداشت شده</p>
-          <p className="count-item"> {countWithdrawalAmount || 0}</p>
+          <p className="count-item">
+            {loadingUsersPayments ? (
+              <Spin spinning={loadingUsersPayments} />
+            ) : (
+              countWithdrawalAmount || 0
+            )}
+          </p>
         </div>
       </div>
       <div className="dashboard-item">
         <FaUsers className="icon icon-count-wallet" />
         <div className="count-box">
           <p>مبالغ موجود در کیف پول کاربران</p>
-          <p className="count-item"> {countWalletAmount || 0}</p>
+          <p className="count-item">
+            {" "}
+            {loadingUsersPayments ? (
+              <Spin spinning={loadingUsersPayments} />
+            ) : (
+              countWalletAmount || 0
+            )}
+          </p>
         </div>
       </div>
       <div className="dashboard-item">
@@ -175,7 +217,11 @@ export const DashboardGrids = () => {
         <div className="count-box">
           <p>تعداد تماس های برقرار شده</p>
           <p className="count-item">
-            {callLogsStep?.listCallLogs?.length || 0}
+            {loadingCallLogsStep ? (
+              <Spin spinning={loadingCallLogsStep} />
+            ) : (
+              callLogsStep?.listCallLogs?.length || 0
+            )}
           </p>
         </div>
       </div>
@@ -185,7 +231,11 @@ export const DashboardGrids = () => {
           <p> تعداد تماس های رزرو شده</p>
           <p className="count-item">
             {" "}
-            {reservesCall?.getReserves?.length || 0}
+            {loadingReservesCall ? (
+              <Spin spinning={loadingReservesCall} />
+            ) : (
+              reservesCall?.getReserves?.length || 0
+            )}
           </p>
         </div>
       </div>
@@ -194,7 +244,11 @@ export const DashboardGrids = () => {
         <div className="count-box">
           <p>مبالغ بلاک شده</p>
           <p className="count-item">
-            {usersAmountBlocked?.getUsers?.length || 0}
+            {loadingUsersAmountBlocked ? (
+              <Spin spinning={loadingUsersAmountBlocked} />
+            ) : (
+              usersAmountBlocked?.getUsers?.length || 0
+            )}
           </p>
         </div>
       </div>

@@ -11,7 +11,8 @@ export const AdminTopBox = ({
   filterUsers = "",
   refetch = "",
   error = "",
-  createUserCat = "",
+  createAdmin = "",
+  userID,
 }) => {
   // MODAL OPRATIONS
   const [addModal, setAddModal] = useState(false);
@@ -23,9 +24,9 @@ export const AdminTopBox = ({
   };
   // MODAL OPRATIONS END
 
-  const addUser = (values) => {
+  const addUser = async (values) => {
     try {
-      createUserCat({
+      await createAdmin({
         variables: {
           name: values.name,
           username: values.username,
@@ -41,7 +42,7 @@ export const AdminTopBox = ({
       });
     } catch (err) {
       console.log(err);
-      message.error(error?.message ? error?.message : "خطا مجددا تلاش کنید");
+      await message.error(error?.message);
     }
   };
   return (
