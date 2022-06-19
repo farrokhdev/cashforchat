@@ -10,10 +10,28 @@ const UserCallsComp = () => {
 
   const callsList = callsData?.listCallLogs;
 
+  const status = (record) => {
+    if(record?.step === 1){
+      return (<Tag color={"blue"}>start</Tag>)
+    }
+    else if(record?.step === 2){
+      return (<Tag color={"lime"}>answer</Tag>)
+    }
+    else if(record?.step === 3){
+      return (<Tag color={"purple"}>reject</Tag>)
+    }
+    else if(record?.step === 9){
+      return (<Tag color={"red"}>missed</Tag>)
+    }
+    else if(record?.step === 10){
+      return (<Tag color={"green"}>end</Tag>)
+    }
+  }
+
   const columns = [
     {
-      title: " نام کاربری  ",
-      dataIndex: "username",
+      title: " نام کامل  ",
+      dataIndex: "fullName",
       width: "20%",
       editable: true,
       align: "center",
@@ -26,13 +44,27 @@ const UserCallsComp = () => {
               justifyContent: "space-evenly",
             }}
           >
-            {record?.user?.username}
+            {record?.user?.fullName}
           </span>
         );
       },
     },
     {
       title: "وضعیت ",
+      dataIndex: "step",
+      width: "20%",
+      editable: true,
+      align: "center",
+      render: (_,record) => {
+        return(
+          <span>
+            {status(record)}
+          </span>
+        )
+      }
+    },
+    {
+      title: "مخاطب ",
       dataIndex: "status",
       width: "20%",
       editable: true,
@@ -40,9 +72,7 @@ const UserCallsComp = () => {
       render: (_,record) => {
         return(
           <span>
-            {record?.status == "Missed" ? 
-            <Tag color={"red"}>Missed</Tag> :
-            <Tag color={"green"}>Incoming</Tag>}
+            {record?.provider?.fullName}
           </span>
         )
       }
@@ -67,17 +97,10 @@ const UserCallsComp = () => {
         );
       },
     },
-    // {
-    //   title: "تماس گیرنده ",
-    //   dataIndex: "caller",
-    //   width: "40%",
-    //   editable: true,
-    //   align: "center",
-    // },
     {
       title: "رزرو شده ",
       dataIndex: "isReserved",
-      width: "40%",
+      width: "20%",
       align: "center",
       render: (_, record) => {
         return (

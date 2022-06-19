@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, Input, InputNumber } from "antd";
+import { Button, Form, Input } from "antd";
 
 const validateMessages = {
   required: "${label} پر کردن این فیلد ضروری میباشد!",
@@ -18,9 +18,9 @@ export const SearchUserForm = ({ onFinish }) => {
       name="search-user"
       onFinish={onFinish}
       validateMessages={validateMessages}
-      className="flex-row-center gap-10"
+      className="search-user flex-row-center gap-10"
     >
-      <Form.Item
+      {/* <Form.Item
         name={"username"}
         label="نام کاربری"
         rules={[
@@ -30,7 +30,7 @@ export const SearchUserForm = ({ onFinish }) => {
         ]}
       >
         <Input />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item
         name={"fullName"}
         label="نام کامل"
@@ -53,7 +53,7 @@ export const SearchUserForm = ({ onFinish }) => {
           },
         ]}
       >
-        <Input />
+        <Input/>
       </Form.Item>
 
       <Form.Item>

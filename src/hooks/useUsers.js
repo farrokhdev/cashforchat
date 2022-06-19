@@ -6,10 +6,10 @@ export const GET_USERS = gql`
     getUsers {
       fullName
       username
-      # phoneNumber
-      # wallet
-      # rate
-      # _id
+      phoneNumber
+      wallet
+      rate
+      _id
       # createdAt
     }
   }
@@ -34,10 +34,10 @@ export const FILTER_USERS = gql`
     getUsers(filters: $filters) {
       fullName
       phoneNumber
-      username
-      wallet
-      rate
-      _id
+      # username
+      # wallet
+      # rate
+      # _id
     }
   }
 `;
@@ -84,7 +84,7 @@ export const useGetUser = (id) => {
     },
   ] = useLazyQuery(GET_USER, {
     variables: { id: id },
-  });
+    fetchPolicy: "no-cache"});
 
   return {
     getSingleUser,

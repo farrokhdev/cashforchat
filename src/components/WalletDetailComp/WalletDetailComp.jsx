@@ -156,7 +156,7 @@ export const WalletDetailComp = () => {
                 </Row>
                 <Row className="m-t-10" gutter={0}>
                   <Col span={24}>
-                    <UserCallsComp />
+                    {/* <UserCallsComp /> */}
                   </Col>
                 </Row>
               </>

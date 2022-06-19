@@ -30,7 +30,7 @@ export const DashboardGrids = () => {
     GetUsersPayments();
   const [countDepositAmount, setCountDepositAmount] = useState(0);
 
-  console.log(usersPayments);
+  // console.log(usersPayments);
 
   useEffect(() => {
     if (usersPayments) {

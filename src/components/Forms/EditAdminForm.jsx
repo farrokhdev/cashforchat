@@ -13,8 +13,7 @@ const validateMessages = {
 };
 
 export const EditAdminForm = ({
-  onFinish,
-  userID,
+  AdminID,
   singleAdminData,
   getSingleAdmin,
   singleRefetch,
@@ -27,7 +26,7 @@ export const EditAdminForm = ({
     try {
       getSingleAdmin({
         variables: {
-          id: userID,
+          id: AdminID,
         },
       }).then(() => {
         singleRefetch();
@@ -35,18 +34,21 @@ export const EditAdminForm = ({
     } catch (err) {
       console.log(err);
     }
-  }, [userID]);
+  }, [AdminID]);
 
   const edit = async (value) => {
+    console.log(value);
     try {
       await update({
         variables: {
-          id: userID,
+          id: AdminID,
+         input:{
           username: value.username,
           name: value.name,
           family: value.family,
           password: value.password,
           phoneNumber: value.phoneNumber,
+         }
         },
       }).then(() => {
         message.success("کاربر با موفقیت بروزرسانی شد");
@@ -76,7 +78,7 @@ export const EditAdminForm = ({
         label="نام "
         rules={[
           {
-            required: true,
+            //required: true,
           },
         ]}
       >
@@ -87,7 +89,7 @@ export const EditAdminForm = ({
         label="نام کاربری"
         rules={[
           {
-            required: true,
+            //required: true,
           },
         ]}
       >
@@ -98,7 +100,7 @@ export const EditAdminForm = ({
         label="نام خانوادگی"
         rules={[
           {
-            required: true,
+            //required: true,
           },
         ]}
       >
@@ -109,7 +111,7 @@ export const EditAdminForm = ({
         label="کلمه عبور"
         rules={[
           {
-            required: true,
+            //required: true,
             min: 8,
           },
         ]}
@@ -121,7 +123,7 @@ export const EditAdminForm = ({
         label="شماره تماس"
         rules={[
           {
-            required: true,
+            //required: true,
             min: 0,
             max: 11,
           },

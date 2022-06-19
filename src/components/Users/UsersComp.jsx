@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DefaultTable from "../Table/DefaultTable";
 import { Button, Form, message, Popconfirm, Spin, Typography } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import '../../assets/styles/table.scss';
 import {
   useFilterUsers,
   useGetUsers,
@@ -13,19 +14,13 @@ import {
 import { TopBox } from "../Globals/TopBox";
 import EditUserModal from "../modals/EditUserModal";
 import { EditUserForm } from "../Forms/EditUserForm";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
+import CurrencyFormat from "react-currency-format";
 
 export const UsersComp = () => {
   // CRUD OPRATIONS
   const { usersData, usersLoading, usersError, refetch } = useGetUsers();
 
-  // useEffect(async () => {
-  //   try {
-  //     await getUsersList();
-  //   } catch (err) {
-  //     await message.error(usersError?.message);
-  //   }
-  // }, []);
 
   const { filterUsers, filterUsersData, filterUsersLoading, filterUsersError } =
     useFilterUsers();
@@ -43,11 +38,11 @@ export const UsersComp = () => {
   } = useGetUser();
 
   // CRUD OPRATIONS END
-
+  
   // user ID
   const [userID, setUserId] = useState(null);
   // user ID END
-
+  
   // TABLE COLUMN
   const columns = [
     {
@@ -77,6 +72,16 @@ export const UsersComp = () => {
       width: "10%",
       editable: true,
       align: "center",
+      render:(_,record) => {
+        return (
+            <CurrencyFormat 
+                value={record.wallet}
+                thousandSeparator={true}
+                suffix={'R'}
+                displayType={'text'}
+                // renderText={value => <div>{value}</div>}
+                />)
+      }
     },
     {
       title: "امتیاز",
@@ -103,7 +108,7 @@ export const UsersComp = () => {
               <EditOutlined />
             </Typography.Link>
             <Button type="primary" onClick={() => gotToDetailsPage(record._id)}>
-              جزییات کیف پول
+              جزییات  
             </Button>
             <Typography.Link>
               <Popconfirm
@@ -151,6 +156,18 @@ export const UsersComp = () => {
     setEditModal(true);
   };
 
+  useEffect(() => {
+    try {
+      getSingleUser({
+        variables: {
+          id: userID,
+        },
+      }).then(() => {});
+    } catch (err) {
+      console.log(err);
+    }
+  }, [userID]);
+  
   const hideEditModal = () => {
     setEditModal(false);
   };
@@ -172,6 +189,24 @@ export const UsersComp = () => {
     });
   };
 
+  //footer
+  let Wallet = [];
+  usersData?.getUsers?.map(amount => Wallet.push(amount?.wallet));
+  const footer = () => {
+    let amountAll = Wallet.reduce(function(a, b){
+      return a + b;
+    }, 0);
+
+    return (
+      <div className="user-table-footer">جمع کل کیف پول : <CurrencyFormat
+        value={amountAll}
+        thousandSeparator={true}
+        suffix={'R'}
+        displayType={'text'}
+        />
+      </div>)
+  }
+  
   return (
     <>
       {/* EDIT MODAL  */}
@@ -209,13 +244,14 @@ export const UsersComp = () => {
       <DefaultTable
         form={form}
         data={
-          filterUsersData?.getUsers.length
-            ? filterUsersData?.getUsers
-            : usersData?.getUsers
+          filterUsersData?.getUsers?.length
+          ?filterUsersData?.getUsers
+          :usersData?.getUsers
         }
         columns={columns}
         loading={filterUsersLoading ? filterUsersLoading : usersLoading}
         error={usersError}
+        footer={footer}
       />
     </>
   );

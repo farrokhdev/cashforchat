@@ -29,7 +29,7 @@ export const Template = ({ children }) => {
   };
 
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
 
   return (
     <Layout className="costum-template">

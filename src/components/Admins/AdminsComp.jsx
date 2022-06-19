@@ -47,7 +47,7 @@ export const AdminsComp = () => {
   // CRUD OPRATIONS END
 
   // user ID
-  const [userID, setUserId] = useState(null);
+  const [AdminID, setAdminID] = useState(null);
   // user ID END
 
   // TABLE COLUMN
@@ -148,7 +148,7 @@ export const AdminsComp = () => {
   // EDIT MODAL
   const [editModal, setEditModal] = useState(false);
   const showEditModal = (record) => {
-    setUserId(record._id);
+    setAdminID(record._id);
     setEditModal(true);
   };
 
@@ -164,13 +164,6 @@ export const AdminsComp = () => {
   const [form] = Form.useForm();
   // form validation end
 
-  // NAVIGATE HANDLER
-  const Navigate = useNavigate();
-
-  const gotToDetailsPage = (id) => {
-    Navigate(`/users/wallet/${id}`);
-  };
-
   return (
     <>
       {/* EDIT MODAL  */}
@@ -185,7 +178,7 @@ export const AdminsComp = () => {
           </>
         ) : (
           <EditAdminForm
-            userID={userID}
+            AdminID={AdminID}
             singleAdminData={singleAdminData}
             getSingleAdmin={getSingleAdmin}
             singleRefetch={singleRefetch}
@@ -201,7 +194,6 @@ export const AdminsComp = () => {
         btnText={"ایجاد ادمین جدید"}
         refetch={adminRefetch}
         createAdmin={createAdmin}
-        userID={userID}
         error={addError}
       />
       <DefaultTable

@@ -13,18 +13,21 @@ const validateMessages = {
 };
 
 export const EditUserCatForm = ({
-  userID,
-  refetch,
-  update,
-  editError,
-  hideEditModal,
-  userCatsData,
+  userCatID="",
+  getSingleUserCat="",
+  singleCatRefetch="",
+  singleUserCatData="",
+  refetch="",
+  update="",
+  editError="",
+  hideEditModal="",
 }) => {
+
   const edit = async (value) => {
     try {
       await update({
         variables: {
-          id: userID,
+          id: userCatID,
           title: value.title,
           key: value.key,
           description: value.description,
@@ -39,20 +42,17 @@ export const EditUserCatForm = ({
       await message.error(editError.message);
     }
   };
-
-  const initialVal = userCatsData.filter((val) => val._id === userID);
-
-  console.log(initialVal);
-
+  // console.log(singleUserCatData?.getUserCategory?.title)
+  // console.log(userCatID)
   return (
     <Form
       name="edit-user-cat"
       onFinish={edit}
       validateMessages={validateMessages}
       initialValues={{
-        title: initialVal.title,
-        key: initialVal.key,
-        description: initialVal.description,
+        title: singleUserCatData?.getUserCategory?.title,
+        key: singleUserCatData?.getUserCategory?.key,
+        description: singleUserCatData?.getUserCategory?.description,
       }}
     >
       <Form.Item

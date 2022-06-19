@@ -5,9 +5,14 @@ const GET_ListCallLogs = gql`
     listCallLogs {
       user {
         username
+        fullName
         amountBlocked
       }
+      provider{
+        fullName
+      }
       status
+      step
       caller
       isReserved
     }

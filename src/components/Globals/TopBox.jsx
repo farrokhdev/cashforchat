@@ -23,19 +23,42 @@ export const TopBox = ({
     setAddModal(false);
   };
   // MODAL OPRATIONS END
-
+  
   const onSearch = (value) => {
     try {
+      if(value.fullName != ""){
       filterUsers({
         variables: {
           filters: {
-            username: value.username,
+            // username: value.username,
             fullName: value.fullName,
             // phoneNumber: value.phoneNumber,
             // createdAt: value.createdAt,
           },
         },
-      }).then(() => refetch());
+      });} else if(value.phoneNumber != ""){
+        filterUsers({
+          variables: {
+            filters: {
+              // username: value.username,
+              // fullName: value.fullName,
+              phoneNumber: value.phoneNumber,
+              // createdAt: value.createdAt,
+            },
+          },
+        });
+      } else if (value.phoneNumber == "" && value.fullName == ""){
+        filterUsers({
+          variables: {
+            filters: {
+              // username: value.username,
+              // fullName: value.fullName,
+              phoneNumber: null,
+              // createdAt: value.createdAt,
+            },
+          },
+        });
+      }
     } catch (err) {
       if (error) {
         message.error(error?.message ? error?.message : "خطا مجددا تلاش کنید");
@@ -72,7 +95,10 @@ export const TopBox = ({
         <div className="search">
           {/* <Search placeholder={searchText} onSearch={onSearch} enterButton /> */}
 
-          <SearchUserForm onFinish={onSearch} />
+          <SearchUserForm 
+            onFinish={onSearch} 
+          />
+
         </div>
         <div className="create-btn">
           <Button type="primary" onClick={showModal}>

@@ -1,0 +1,9 @@
+@import './variables/colors.scss';
+
+.user-table-footer{
+    background-color: $color1;
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+    text-align: center;
+}

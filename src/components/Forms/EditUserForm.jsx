@@ -13,7 +13,6 @@ const validateMessages = {
 };
 
 export const EditUserForm = ({
-  onFinish,
   userID,
   singleUserData,
   getSingleUser,
@@ -23,23 +22,10 @@ export const EditUserForm = ({
   editError,
   hideEditModal,
 }) => {
-  useEffect(() => {
-    try {
-      getSingleUser({
-        variables: {
-          id: userID,
-        },
-      }).then(() => {
-        singleRefetch();
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }, [userID]);
 
-  const edit = (value) => {
+  const edit = async (value) => {
     try {
-      updateUser({
+      await updateUser({
         variables: {
           userId: userID,
           username: value.username,
@@ -53,7 +39,7 @@ export const EditUserForm = ({
       });
     } catch (err) {
       console.log(err);
-      message.error(editError.message);
+      await message.error(editError.message);
     }
   };
 

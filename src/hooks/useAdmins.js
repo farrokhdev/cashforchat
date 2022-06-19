@@ -140,13 +140,14 @@ export const useAddAdmin = (input) => {
 // EDIT ADMIN
 
 export const EditAdmin = gql`
-  mutation editAdmin($username: String, $id: ID!) {
-    updateAdminByAdmin(input: { username: $username }, id: $id) {
+  mutation editAdmin($input: UpdateAdminByAdminInput $id: ID!) {
+    updateAdminByAdmin(input: $input, id: $id) {
       _id
       username
+      name
+      family
       phoneNumber
       password
-      status
     }
   }
 `;

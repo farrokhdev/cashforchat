@@ -1,4 +1,4 @@
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { useQuery, gql, useMutation, useLazyQuery } from "@apollo/client";
 
 // GET
 export const GET_UserCategories = gql`
@@ -25,6 +25,36 @@ export const useGetUserCats = () => {
   return { userCatsData, userCatsLoading, userCatsError, refetch };
 };
 // GET
+
+//GET SINGLE USER
+export const GET_SINGLE_USERCAT = gql`
+  query getSingleUserCat($id: ID!) {
+    getUserCategory(id: $id) {
+      _id
+      title
+      key
+      description
+    }
+  }
+`;
+
+export const useGetUserCat = (id) => {
+  const [
+      getSingleUserCat , {
+      data: singleUserCatData, 
+      error: singleUserCatError, 
+      loading: singleUserCatLoading, 
+      refetch: singleCatRefetch}] =
+  useLazyQuery(GET_SINGLE_USERCAT, 
+      {variables: {id: id},
+      fetchPolicy: "no-cache"})
+
+  return {
+    getSingleUserCat, 
+    singleUserCatData, 
+    singleUserCatError, 
+    singleUserCatLoading, singleCatRefetch}
+}
 
 // DELETE
 export const DeleteUserCategory = gql`

@@ -2,37 +2,15 @@ import React, { useEffect, useState } from "react";
 import DefaultTable from "../Table/DefaultTable";
 import { Button, Form, message, Popconfirm, Spin, Typography } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import {
-  useFilterUsers,
-  useGetUsers,
-  useAddUser,
-  useDeleteUser,
-  useEditUser,
-  useGetUser,
-} from "../../hooks/useUsers";
-import { TopBox } from "../Globals/TopBox";
-import EditUserModal from "../modals/EditUserModal";
-import { EditUserForm } from "../Forms/EditUserForm";
-import { useNavigate, useParams } from "react-router";
-import {
-  useAddAdmin,
-  useDeleteAdmin,
-  useEditAdmin,
-  useGetAdmin,
-  useGetAdmins,
-} from "../../hooks/useAdmins";
+
 import { UserCatTopBox } from "../Globals/UserCatTopBox";
-import EditAdminModal from "../modals/EditAdminModal";
-import { EditAdminForm } from "../Forms/EditAdminForm";
 import {
   useAddUserCat,
   useDeleteUserCat,
   useEditUserCat,
+  useGetUserCat,
   useGetUserCats,
 } from "../../hooks/useUserCategories";
-import { AddUserCatForm } from "../Forms/AddUserCatForm";
-
-import AddUserCatModal from "../modals/AddUserCatModal";
 import EditUserCatModal from "../modals/EditUserCatModal";
 import { EditUserCatForm } from "../Forms/EditUserCatForm";
 
@@ -48,11 +26,15 @@ export const UserCategoriesComp = () => {
   const { updateUserCat, editData, editLoading, editError, editRefetch } =
     useEditUserCat();
 
+  const {getSingleUserCat, singleUserCatData, singleUserCatError, singleUserCatLoading, singleCatRefetch} = 
+    useGetUserCat()
+
   // CRUD OPRATIONS END
 
   // user ID
-  const [userID, setUserId] = useState(null);
+  const [userCatID, setUserCatID] = useState(null);
   // user ID END
+
 
   // TABLE COLUMN
   const columns = [
@@ -116,7 +98,6 @@ export const UserCategoriesComp = () => {
 
   // TABLE ACTIONS
   const remove = (record) => {
-    console.log(record);
     try {
       removeUserCat({
         variables: {
@@ -135,33 +116,29 @@ export const UserCategoriesComp = () => {
   };
 
   // EDIT MODAL
-  const [initialVal, setInitialVal] = useState({
-    title: "",
-    key: "",
-    description: "",
-  });
-
   const [editModal, setEditModal] = useState(false);
-  const showEditModal = async (record) => {
+  const showEditModal = (record) => {
     setEditModal(true);
+    setUserCatID(record._id); 
+    
+    };
 
-    setUserId(record._id);
-    setInitialVal({
-      ...initialVal,
-      title: record.title,
-      key: record.key,
-      description: record.description,
-    });
-  };
+  useEffect(() => {
+    try {
+       getSingleUserCat({
+       variables: {
+         id: userCatID,
+       },
+     }).then(() => {});
+   } catch (err) {
+     console.log(err);
+   }
 
+}, [userCatID]);
+  
   const hideEditModal = () => {
     setEditModal(false);
-    setInitialVal({
-      ...initialVal,
-      title: "",
-      key: "",
-      description: "",
-    });
+    // setUserCatID(null);
   };
 
   // EDIT MODAL END
@@ -172,26 +149,33 @@ export const UserCategoriesComp = () => {
   const [form] = Form.useForm();
   // form validation end
 
-  // NAVIGATE HANDLER
-  const Navigate = useNavigate();
-
-  const gotToDetailsPage = (id) => {
-    Navigate(`/users/wallet/${id}`);
-  };
 
   return (
     <>
       {/* EDIT MODAL  */}
-      <EditUserCatModal visible={editModal} closeModal={hideEditModal}>
-        <EditUserCatForm
-          update={updateUserCat}
-          refetch={refetch}
-          userID={userID}
-          editError={editError}
-          hideEditModal={hideEditModal}
-          userCatsData={userCatsData?.getUserCategories}
-        />
+      <EditUserCatModal 
+        visible={editModal} 
+        closeModal={hideEditModal} 
+        showModal={showEditModal}
+        >
+        {singleUserCatLoading ? (
+          <>
+            <Spin spinning={singleUserCatLoading} />
+          </>
+        ) : (
+          <EditUserCatForm
+            singleUserCatData={singleUserCatData}
+            singleCatRefetch={singleCatRefetch}
+            getSingleUserCat={getSingleUserCat}
+            update={updateUserCat}
+            refetch={refetch}
+            userCatID={userCatID}
+            editError={editError}
+            hideEditModal={hideEditModal}
+          />
+        )}
       </EditUserCatModal>
+      
       {/* EDIT MODAL END */}
       <UserCatTopBox
         btnText={"ایجاد دسته بندی جدید"}
