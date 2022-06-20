@@ -4,6 +4,7 @@ import { TopBox } from "../components/Globals/TopBox";
 import { Template } from "../components/Template/Template";
 
 export const Admins = () => {
+
   return (
     <>
       <Template>

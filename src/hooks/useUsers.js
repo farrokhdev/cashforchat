@@ -84,7 +84,8 @@ export const useGetUser = (id) => {
     },
   ] = useLazyQuery(GET_USER, {
     variables: { id: id },
-    fetchPolicy: "no-cache"});
+    fetchPolicy: "no-cache",
+  });
 
   return {
     getSingleUser,

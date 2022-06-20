@@ -43,7 +43,6 @@ export const AdminsComp = () => {
     singleAdminError,
     singleRefetch,
   } = useGetAdmin();
-
   // CRUD OPRATIONS END
 
   // user ID

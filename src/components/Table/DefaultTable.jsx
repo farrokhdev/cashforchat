@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Form, Table, message } from "antd";
+import '../../assets/styles/settRowClass.scss';
 
 const DefaultTable = ({
   form = "",
@@ -15,6 +16,16 @@ const DefaultTable = ({
       message.error(error?.message);
     }
   },[error])
+
+  const rowColor = record => {
+    if(record?.status == 1){
+      return 'table-row-one'
+    } else if (record?.status == 2){
+      return 'table-row-two'
+    } else if (record?.status == 3){
+      return 'table-row-three'
+    }
+  }
 
   return (
     <Form form={form} component={false}>
@@ -41,20 +52,12 @@ const DefaultTable = ({
         locale={{
           emptyText: "دیتایی موجود نیست",
         }}
-        // components={{
-        //   body: {
-        //     cell: EditableCell,
-        //   },
-        // }}
         bordered
         dataSource={data}
         columns={columns}
-        rowClassName="editable-row"
-        // pagination={{
-        //   onChange: cancel,
-        // }}
         loading={loading}
         footer={footer}
+        rowClassName={ record => rowColor(record) }
       />
     </Form>
   );

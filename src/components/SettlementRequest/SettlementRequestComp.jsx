@@ -1,204 +1,200 @@
 import React, { useState } from "react";
 import DefaultTable from "../Table/DefaultTable";
-import { Form, Table, Input, InputNumber, Typography, Popconfirm } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Form, Typography, Popconfirm, message } from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  CheckOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
 
 import {
-  GET_SettlementRequests,
   useSettlementRequests,
+  useDeleteSett,
+  useFinish,
+  useEditRequest,
+  useAddSettlement,
 } from "../../hooks/useSettlementRequests";
-
-import { useQuery } from "@apollo/client";
-import { TopBox } from "../Globals/TopBox";
+import CurrencyFormat from "react-currency-format";
+import SettTopBox from "../Globals/SettTopBox";
 
 export const SettlementRequestComp = () => {
-  const { loading, data, error, refetch } = useSettlementRequests();
+  const { settError, settData, settLoading, settRefetch } =
+    useSettlementRequests();
+  const {
+    deleteSettlement,
+    deleteSettData,
+    deleteSettError,
+    deleteSettLoading,
+  } = useDeleteSett();
+  const { settFinish, finishLoading, finishData, finishError } = useFinish();
+  const { editRequest, editRequestData, editRequestError, editRequestLoading } =
+    useEditRequest();
+  const {
+    addSettlement,
+    addSettlementError,
+    addSettlementData,
+    addSettlementLoading,
+  } = useAddSettlement();
 
-  console.log(data);
-
-  const settlementRequestList = data?.getSettlementRequests;
-  const [form] = Form.useForm();
-  const [settlementRequest, setSettlementRequest] = useState(
-    settlementRequestList
-  );
-  const [editingKey, setEditingKey] = useState("");
-
-  const isEditing = (record) => record.key === editingKey;
-
-  const EditableCell = ({
-    editing,
-    dataIndex,
-    title,
-    inputType,
-    record,
-    index,
-    children,
-    ...restProps
-  }) => {
-    const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item
-            name={dataIndex}
-            style={{
-              margin: 0,
-            }}
-            rules={[
-              {
-                required: true,
-                message: `Please Input ${title}!`,
-              },
-            ]}
-          >
-            {inputNode}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
-
-  const edit = (record) => {
-    form.setFieldsValue({
-      username: "",
-      name: "",
-      family: "",
-      ...record,
-    });
-    setEditingKey(record.key);
-  };
-
-  const cancel = () => {
-    setEditingKey("");
-  };
-
-  const save = async (key) => {
+  const remove = async (record) => {
     try {
-      const row = await form.validateFields();
-      const newData = [...settlementRequestList];
-      const index = newData.findIndex((item) => key === item._id);
-
-      console.log(newData);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setSettlementRequest(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setSettlementRequest(newData);
-        setEditingKey("");
-      }
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
+      await deleteSettlement({
+        variables: {
+          Id: record?.userId?._id,
+        },
+      }).then(() => {
+        message.success("درخواست حذف شد");
+        settRefetch();
+      });
+    } catch (err) {
+      console.log(err);
+      await message.error(
+        deleteSettError?.message
+          ? deleteSettError?.message
+          : "حذف درخواست با مشکل مواجه شد دوباره تلاش کنید"
+      );
     }
   };
 
-  const remove = () => {};
+  const finish = async (record) => {
+    try {
+      await settFinish({
+        variables: {
+          id: record?.userId?._id,
+          input: {
+            description: record?.description,
+            status: record?.status,
+          },
+        },
+      }).then(() => {
+        message.success("درخواست تایید شد");
+        settRefetch();
+      });
+    } catch (err) {
+      await message.error(
+        finishError?.message
+          ? finishError?.message
+          : "تایید درخواست با مشکل مواجه شد دوباره تلاش کنید"
+      );
+    }
+  };
 
   const columns = [
     {
       title: "نام کاربری",
       dataIndex: "username",
-      width: "15%",
-      editable: true,
+      width: "10%",
       align: "center",
       render: (_, record) => {
-        return <>{record.userId.username}</>;
+        return <>{record?.userId?.username}</>;
       },
     },
     {
-      title: "شماره تماس",
-      dataIndex: "phoneNumber",
-      width: "15%",
-      editable: true,
+      title: "مبلغ",
+      dataIndex: "amount",
+      width: "10%",
       align: "center",
       render: (_, record) => {
-        return <>{record.userId.phoneNumber}</>;
+        return (
+          <CurrencyFormat
+            value={record?.amount}
+            thousandSeparator={true}
+            suffix={"R"}
+            displayType={"text"}
+          />
+        );
       },
     },
     {
-      title: "نام کامل",
-      dataIndex: "fullName",
+      title: "شماره شبا",
+      dataIndex: "shebaNo",
       width: "15%",
-      editable: true,
       align: "center",
       render: (_, record) => {
-        return <>{record.userId.fullName}</>;
+        return <>{record?.shebaNo}</>;
       },
     },
-    // {
-    //   title: "تغییرات",
-    //   dataIndex: "actions",
-    //   align: "center",
-    //   render: (_, record) => {
-    //     const editable = isEditing(record);
-    //     return editable ? (
-    //       <span>
-    //         <Typography.Link
-    //           onClick={() => save(record.key)}
-    //           style={{
-    //             marginRight: 8,
-    //           }}
-    //         >
-    //           Save
-    //         </Typography.Link>
-    //         <Popconfirm title="Sure to cancel?" onConfirm={cancel}  okText={"حذف"}
-    // cancelText={"انصراف"}>
-    //           <a>Cancel</a>
-    //         </Popconfirm>
-    //       </span>
-    //     ) : (
-    //       <span
-    //         style={{
-    //           display: "flex",
-    //           flexDirection: "row",
-    //           justifyContent: "space-evenly",
-    //         }}
-    //       >
-    //         <Typography.Link
-    //           disabled={editingKey !== ""}
-    //           onClick={() => edit(record)}
-    //         >
-    //           <EditOutlined />
-    //         </Typography.Link>
-    //         <Typography.Link>
-    //           <DeleteOutlined />
-    //         </Typography.Link>
-    //       </span>
-    //     );
-    //   },
-    // },
+    {
+      title: "شماره کارت",
+      dataIndex: "creditCardNo",
+      width: "15%",
+      align: "center",
+      render: (_, record) => {
+        return <>{record?.creditCardNo}</>;
+      },
+    },
+    {
+      title: "تغییرات",
+      dataIndex: "actions",
+      width: "15%",
+      align: "center",
+      render: (_, record) => {
+        return (
+          <span
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <Typography.Link onClick={() => {}}>
+              <EditOutlined />
+            </Typography.Link>
+            <Typography.Link>
+              <Popconfirm
+                onConfirm={() => {
+                  remove(record);
+                }}
+                title="آیا مطمئن هستید؟"
+                okText={"حذف"}
+                cancelText={"انصراف"}
+              >
+                <DeleteOutlined />
+              </Popconfirm>
+            </Typography.Link>
+            <Typography.Link>
+              <Popconfirm
+                onClick={() => {
+                  console.log(record?.status);
+                  finish(record);
+                }}
+                title="آیا مطمئن هستید؟"
+                okText={"تایید"}
+                cancelText={"انصراف"}
+              >
+                <CheckOutlined />
+              </Popconfirm>
+            </Typography.Link>
+            <Typography.Link>
+              <Popconfirm
+                onClick={() => {
+                  finish(record);
+                }}
+                title="آیا مطمئن هستید؟"
+                okText={"رد"}
+                cancelText={"انصراف"}
+              >
+                <CloseOutlined />
+              </Popconfirm>
+            </Typography.Link>
+          </span>
+        );
+      },
+    },
   ];
 
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
+  const [form] = Form.useForm();
 
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === "age" ? "number" : "text",
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
   return (
     <>
-      <TopBox searchText={"جستجو..."} btnText={"ایجاد جدید"} />
+      <SettTopBox />
       <DefaultTable
         form={form}
-        data={settlementRequestList}
-        columns={mergedColumns}
-        EditableCell={EditableCell}
-        loading={loading}
-        error={error}
+        data={settData?.getSettlementRequests}
+        columns={columns}
+        loading={settLoading}
+        error={settError}
       />
     </>
   );

@@ -106,9 +106,14 @@ export const Template = ({ children }) => {
           >
             <Link to="/user-calls">تماس های کاربران</Link>
           </Menu.Item>
-          {/* <Menu.Item key="6" icon={<PhoneOutlined />}>
+          <Menu.Item 
+            className={
+              location?.pathname === "/settlement-requests" ? "ant-menu-item-selected" : ""
+            }
+            key="6" 
+            icon={<DollarCircleOutlined />}>
             <Link to="/settlement-requests">درخواست تسویه</Link>
-          </Menu.Item> */}
+          </Menu.Item>
           <Menu.Item
             className={
               location?.pathname === "/admins" ? "ant-menu-item-selected" : ""

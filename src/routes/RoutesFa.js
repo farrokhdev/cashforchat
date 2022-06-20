@@ -16,6 +16,7 @@ import { map } from "./RouteMap";
 import { WalletDetail } from "../pages/WalletDetail";
 import TokenManager from "../lib/tokenManager";
 
+
 export const RoutesFa = () => {
   const { access_token } = TokenManager.getToken();
   return (
@@ -90,6 +91,7 @@ export const RoutesFa = () => {
             access_token ? <WalletDetail /> : <Navigate to={map.routes.login} />
           }
         />
+
       </Routes>
     </>
   );
