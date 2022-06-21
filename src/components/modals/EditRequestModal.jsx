@@ -1,18 +1,18 @@
 import React from "react";
-import { Button, Modal } from "antd";
+import { Modal, Button } from "antd";
 
-const EditUserModal = ({ editModal, hideModal, children }) => {
+const EditRequestModal = ({ editModal, hideModal, children }) => {
   return (
     <>
       <Modal
-        title="بروز رسانی کاربر"
+        title="بروز رسانی درخواست"
         visible={editModal}
         onCancel={hideModal}
         footer={[
           <>
             <Button
               type="primary"
-              form="edit-user"
+              form="edit-request"
               key="submit"
               htmlType="submit"
             >
@@ -30,4 +30,4 @@ const EditUserModal = ({ editModal, hideModal, children }) => {
   );
 };
 
-export default EditUserModal;
+export default EditRequestModal;

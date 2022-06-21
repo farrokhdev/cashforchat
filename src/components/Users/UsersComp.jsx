@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DefaultTable from "../Table/DefaultTable";
 import { Button, Form, message, Popconfirm, Spin, Typography } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import '../../assets/styles/table.scss';
+import "../../assets/styles/table.scss";
 import {
   useFilterUsers,
   useGetUsers,
@@ -21,7 +21,6 @@ export const UsersComp = () => {
   // CRUD OPRATIONS
   const { usersData, usersLoading, usersError, refetch } = useGetUsers();
 
-
   const { filterUsers, filterUsersData, filterUsersLoading, filterUsersError } =
     useFilterUsers();
   const { createUser, addData, addLoading, addError } = useAddUser();
@@ -38,11 +37,11 @@ export const UsersComp = () => {
   } = useGetUser();
 
   // CRUD OPRATIONS END
-  
+
   // user ID
   const [userID, setUserId] = useState(null);
   // user ID END
-  
+
   // TABLE COLUMN
   const columns = [
     {
@@ -72,16 +71,17 @@ export const UsersComp = () => {
       width: "10%",
       editable: true,
       align: "center",
-      render:(_,record) => {
+      render: (_, record) => {
         return (
-            <CurrencyFormat 
-                value={record.wallet}
-                thousandSeparator={true}
-                suffix={'R'}
-                displayType={'text'}
-                // renderText={value => <div>{value}</div>}
-                />)
-      }
+          <CurrencyFormat
+            value={record.wallet}
+            thousandSeparator={true}
+            suffix={"R"}
+            displayType={"text"}
+            // renderText={value => <div>{value}</div>}
+          />
+        );
+      },
     },
     {
       title: "امتیاز",
@@ -108,7 +108,7 @@ export const UsersComp = () => {
               <EditOutlined />
             </Typography.Link>
             <Button type="primary" onClick={() => gotToDetailsPage(record._id)}>
-              جزییات  
+              جزییات
             </Button>
             <Typography.Link>
               <Popconfirm
@@ -129,9 +129,9 @@ export const UsersComp = () => {
   // TABLE COLUMN END
 
   // TABLE ACTIONS
-  const remove = (record) => {
+  const remove = async (record) => {
     try {
-      removeUser({
+      await removeUser({
         variables: {
           userId: record._id,
         },
@@ -141,7 +141,7 @@ export const UsersComp = () => {
       });
     } catch (err) {
       console.log(err);
-      message.error(
+      await message.error(
         deleteError?.message
           ? deleteError?.message
           : "حذف کاربر با مشکل مواجه شد دوباره تلاش کنید"
@@ -167,7 +167,7 @@ export const UsersComp = () => {
       console.log(err);
     }
   }, [userID]);
-  
+
   const hideEditModal = () => {
     setEditModal(false);
   };
@@ -191,22 +191,25 @@ export const UsersComp = () => {
 
   //footer
   let Wallet = [];
-  usersData?.getUsers?.map(amount => Wallet.push(amount?.wallet));
+  usersData?.getUsers?.map((amount) => Wallet.push(amount?.wallet));
   const footer = () => {
-    let amountAll = Wallet.reduce(function(a, b){
+    let amountAll = Wallet.reduce(function (a, b) {
       return a + b;
     }, 0);
 
     return (
-      <div className="user-table-footer">جمع کل کیف پول : <CurrencyFormat
-        value={amountAll}
-        thousandSeparator={true}
-        suffix={'R'}
-        displayType={'text'}
+      <div className="user-table-footer">
+        جمع کل کیف پول :{" "}
+        <CurrencyFormat
+          value={amountAll}
+          thousandSeparator={true}
+          suffix={"R"}
+          displayType={"text"}
         />
-      </div>)
-  }
-  
+      </div>
+    );
+  };
+
   return (
     <>
       {/* EDIT MODAL  */}
@@ -223,8 +226,6 @@ export const UsersComp = () => {
           <EditUserForm
             userID={userID}
             singleUserData={singleUserData}
-            getSingleUser={getSingleUser}
-            singleRefetch={singleRefetch}
             refetch={refetch}
             updateUser={updateUser}
             editError={editError}
@@ -245,8 +246,8 @@ export const UsersComp = () => {
         form={form}
         data={
           filterUsersData?.getUsers?.length
-          ?filterUsersData?.getUsers
-          :usersData?.getUsers
+            ? filterUsersData?.getUsers
+            : usersData?.getUsers
         }
         columns={columns}
         loading={filterUsersLoading ? filterUsersLoading : usersLoading}

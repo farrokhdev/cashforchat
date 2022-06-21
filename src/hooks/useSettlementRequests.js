@@ -1,4 +1,4 @@
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { useQuery, gql, useMutation, useLazyQuery } from "@apollo/client";
 
 //GET_Settlement_Request
 const GET_SettlementRequests = gql`
@@ -11,6 +11,7 @@ const GET_SettlementRequests = gql`
         fullName
         enable
       }
+      _id
       amount
       shebaNo
       creditCardNo
@@ -43,6 +44,7 @@ const GET_SINGLE_REQUEST = gql`
         fullName
         enable
       }
+      _id
       amount
       shebaNo
       creditCardNo
@@ -53,15 +55,24 @@ const GET_SINGLE_REQUEST = gql`
   }
 `;
 export const useSingleRequest = (id) => {
-  const {
-    data: singleRequestData,
-    error: singleRequestError,
-    loading: singleRequestLoading,
-  } = useQuery(GET_SINGLE_REQUEST, {
+  const [
+    singleRequest,
+    {
+      data: singleRequestData,
+      error: singleRequestError,
+      loading: singleRequestLoading,
+    },
+  ] = useLazyQuery(GET_SINGLE_REQUEST, {
     variables: { id: id },
+    fetchPolicy: "no-cache",
   });
 
-  return { singleRequestError, singleRequestLoading, singleRequestData };
+  return {
+    singleRequest,
+    singleRequestError,
+    singleRequestLoading,
+    singleRequestData,
+  };
 };
 
 //Delete_Settlement_Request
@@ -112,9 +123,11 @@ const ADD_SETTLEMENT = gql`
   mutation addSettlement($input: SettlementRequestByAdminInput) {
     createSettlementRequestByAdmin(input: $input) {
       userId {
+        _id
         username
-        fullName
         phoneNumber
+        fullName
+        enable
       }
       amount
       shebaNo

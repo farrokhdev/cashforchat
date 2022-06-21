@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DefaultTable from "../Table/DefaultTable";
-import { Form, Typography, Popconfirm, message } from "antd";
+import { Form, Typography, Popconfirm, message, Spin } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -14,9 +14,13 @@ import {
   useFinish,
   useEditRequest,
   useAddSettlement,
+  useSingleRequest,
 } from "../../hooks/useSettlementRequests";
 import CurrencyFormat from "react-currency-format";
 import SettTopBox from "../Globals/SettTopBox";
+import EditRequestModal from "../modals/EditRequestModal";
+import EditRequestForm from "../Forms/EditRequestForm";
+import { useEffect } from "react";
 
 export const SettlementRequestComp = () => {
   const { settError, settData, settLoading, settRefetch } =
@@ -36,12 +40,46 @@ export const SettlementRequestComp = () => {
     addSettlementData,
     addSettlementLoading,
   } = useAddSettlement();
+  const {
+    singleRequest,
+    singleRequestData,
+    singleRequestError,
+    singleRequestLoading,
+  } = useSingleRequest();
 
+  const [requestID, setRequestID] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [form] = Form.useForm();
+
+  //Edit
+  const [editModal, setEditModal] = useState(false);
+  const showEditModal = (record) => {
+    setRequestID(record?._id);
+    setEditModal(true);
+  };
+
+  const hideEditModal = () => {
+    setEditModal(false);
+  };
+
+  useEffect(() => {
+    try {
+      singleRequest({
+        variables: {
+          id: requestID,
+        },
+      }).then(() => {});
+    } catch (err) {
+      console.log(err);
+    }
+  }, [requestID]);
+  console.log(singleRequestData);
+  //Delete
   const remove = async (record) => {
     try {
       await deleteSettlement({
         variables: {
-          Id: record?.userId?._id,
+          id: record?.userId?._id,
         },
       }).then(() => {
         message.success("درخواست حذف شد");
@@ -57,14 +95,16 @@ export const SettlementRequestComp = () => {
     }
   };
 
+  //Finish
   const finish = async (record) => {
+    console.log(status);
     try {
       await settFinish({
         variables: {
           id: record?.userId?._id,
           input: {
             description: record?.description,
-            status: record?.status,
+            status: status,
           },
         },
       }).then(() => {
@@ -83,11 +123,11 @@ export const SettlementRequestComp = () => {
   const columns = [
     {
       title: "نام کاربری",
-      dataIndex: "username",
+      dataIndex: "fullName",
       width: "10%",
       align: "center",
       render: (_, record) => {
-        return <>{record?.userId?.username}</>;
+        return <>{record?.userId?.fullName}</>;
       },
     },
     {
@@ -125,6 +165,15 @@ export const SettlementRequestComp = () => {
       },
     },
     {
+      title: "توضیحات ",
+      dataIndex: "description",
+      width: "20%",
+      align: "center",
+      render: (_, record) => {
+        return <>{record?.description}</>;
+      },
+    },
+    {
       title: "تغییرات",
       dataIndex: "actions",
       width: "15%",
@@ -138,7 +187,11 @@ export const SettlementRequestComp = () => {
               justifyContent: "space-evenly",
             }}
           >
-            <Typography.Link onClick={() => {}}>
+            <Typography.Link
+              onClick={() => {
+                showEditModal(record);
+              }}
+            >
               <EditOutlined />
             </Typography.Link>
             <Typography.Link>
@@ -153,10 +206,13 @@ export const SettlementRequestComp = () => {
                 <DeleteOutlined />
               </Popconfirm>
             </Typography.Link>
-            <Typography.Link>
+            <Typography.Link
+              onClick={() => {
+                setStatus(2);
+              }}
+            >
               <Popconfirm
-                onClick={() => {
-                  console.log(record?.status);
+                onConfirm={() => {
                   finish(record);
                 }}
                 title="آیا مطمئن هستید؟"
@@ -166,9 +222,13 @@ export const SettlementRequestComp = () => {
                 <CheckOutlined />
               </Popconfirm>
             </Typography.Link>
-            <Typography.Link>
+            <Typography.Link
+              onClick={() => {
+                setStatus(3);
+              }}
+            >
               <Popconfirm
-                onClick={() => {
+                onConfirm={() => {
                   finish(record);
                 }}
                 title="آیا مطمئن هستید؟"
@@ -184,11 +244,25 @@ export const SettlementRequestComp = () => {
     },
   ];
 
-  const [form] = Form.useForm();
-
   return (
     <>
-      <SettTopBox />
+      <EditRequestModal hideModal={hideEditModal} editModal={editModal}>
+        {singleRequestLoading ? (
+          <>
+            <Spin spinning={singleRequestLoading} />
+          </>
+        ) : (
+          <EditRequestForm
+            requestID={requestID}
+            editRequest={editRequest}
+            editRequestError={editRequestError}
+            hideEditModal={hideEditModal}
+            singleRequestData={singleRequestData}
+            settRefetch={settRefetch}
+          />
+        )}
+      </EditRequestModal>
+      <SettTopBox addRequest={addSettlement} refetch={settRefetch} />
       <DefaultTable
         form={form}
         data={settData?.getSettlementRequests}

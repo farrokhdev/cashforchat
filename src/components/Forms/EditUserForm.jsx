@@ -15,14 +15,11 @@ const validateMessages = {
 export const EditUserForm = ({
   userID,
   singleUserData,
-  getSingleUser,
-  singleRefetch,
   refetch,
   updateUser,
   editError,
   hideEditModal,
 }) => {
-
   const edit = async (value) => {
     try {
       await updateUser({
