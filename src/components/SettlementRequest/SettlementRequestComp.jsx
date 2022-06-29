@@ -21,8 +21,23 @@ import SettTopBox from "../Globals/SettTopBox";
 import EditRequestModal from "../modals/EditRequestModal";
 import EditRequestForm from "../Forms/EditRequestForm";
 import { useEffect } from "react";
+import { useGetUsers } from "../../hooks/useUsers";
 
 export const SettlementRequestComp = () => {
+  // form validation
+  const [form] = Form.useForm();
+  const [editForm] = Form.useForm();
+  // form validation end
+
+  const { getUsers, usersData, usersLoading, usersError, refetch } =
+    useGetUsers();
+
+  const getAllUsers = async () => {
+    await getUsers();
+  };
+  useEffect(() => {
+    getAllUsers();
+  }, []);
   const { settError, settData, settLoading, settRefetch } =
     useSettlementRequests();
   const {
@@ -35,7 +50,7 @@ export const SettlementRequestComp = () => {
   const { editRequest, editRequestData, editRequestError, editRequestLoading } =
     useEditRequest();
   const {
-    addSettlement,
+    addNewSettlement,
     addSettlementError,
     addSettlementData,
     addSettlementLoading,
@@ -49,12 +64,29 @@ export const SettlementRequestComp = () => {
 
   const [requestID, setRequestID] = useState(null);
   const [status, setStatus] = useState(null);
-  const [form] = Form.useForm();
 
   //Edit
   const [editModal, setEditModal] = useState(false);
+
+  // get single
+  const singleSettleMent = async (id) => {
+    try {
+      await singleRequest({
+        variables: {
+          id: id,
+        },
+      }).then((res) => {
+        setRequestID(id);
+        editForm.setFieldsValue({
+          ...res.data.getSettlementRequest,
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const showEditModal = (record) => {
-    setRequestID(record?._id);
+    singleSettleMent(record?._id);
     setEditModal(true);
   };
 
@@ -253,16 +285,23 @@ export const SettlementRequestComp = () => {
           </>
         ) : (
           <EditRequestForm
+            form={editForm}
             requestID={requestID}
+            users={usersData?.getUsers}
+            loading={usersLoading}
             editRequest={editRequest}
             editRequestError={editRequestError}
             hideEditModal={hideEditModal}
-            singleRequestData={singleRequestData}
             settRefetch={settRefetch}
           />
         )}
       </EditRequestModal>
-      <SettTopBox addRequest={addSettlement} refetch={settRefetch} />
+      <SettTopBox
+        users={usersData?.getUsers}
+        usersLoading={usersLoading}
+        addRequest={addNewSettlement}
+        refetch={settRefetch}
+      />
       <DefaultTable
         form={form}
         data={settData?.getSettlementRequests}

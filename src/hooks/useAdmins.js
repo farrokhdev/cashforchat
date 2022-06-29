@@ -9,6 +9,7 @@ export const GET_Admins = gql`
       family
       phoneNumber
       _id
+      role
     }
   }
 `;
@@ -21,6 +22,7 @@ export const useGetAdmins = () => {
     refetch: adminRefetch,
   } = useQuery(GET_Admins, {
     manual: true,
+    fetchPolicy: "no-cache",
   });
 
   return { adminsData, adminsLoading, adminsError, adminRefetch };
@@ -52,6 +54,7 @@ export const useGetAdmin = (id) => {
     },
   ] = useLazyQuery(GET_ADMIN, {
     variables: { id: id },
+    fetchPolicy: "no-cache",
   });
 
   return {
@@ -140,7 +143,7 @@ export const useAddAdmin = (input) => {
 // EDIT ADMIN
 
 export const EditAdmin = gql`
-  mutation editAdmin($input: UpdateAdminByAdminInput $id: ID!) {
+  mutation editAdmin($input: UpdateAdminByAdminInput, $id: ID!) {
     updateAdminByAdmin(input: $input, id: $id) {
       _id
       username

@@ -3,7 +3,7 @@ import { Button, message } from "antd";
 import AddRequestModal from "../modals/AddRequestModal";
 import AddRequestForm from "../Forms/AddRequestForm";
 
-const SettTopBox = ({ addRequest, refetch, error }) => {
+const SettTopBox = ({ users, usersLoading, addRequest, refetch, error }) => {
   const [requestModal, setRequestModal] = useState(false);
   const showModal = () => {
     setRequestModal(true);
@@ -12,16 +12,22 @@ const SettTopBox = ({ addRequest, refetch, error }) => {
     setRequestModal(false);
   };
 
-  const addSettRequest = (values) => {
+  console.log(users);
+
+  const addSettRequest = async (values) => {
+    console.log(values);
     try {
-      addRequest({
+      await addRequest({
         variables: {
-          amount: values.amount,
-          shebaNo: values.shebaNo,
-          creditCardNo: values.creditCardNo,
-          bankName: values.bankName,
-          status: values.status,
-          description: values.description,
+          input: {
+            userId: values.userId,
+            amount: values.amount,
+            shebaNo: values.shebaNo,
+            creditCardNo: values.creditCardNo,
+            bankName: values.bankName,
+            status: values.status,
+            description: values.description,
+          },
         },
       }).then(() => {
         message.success("درخواست با موفقیت ساخته شد");
@@ -37,7 +43,11 @@ const SettTopBox = ({ addRequest, refetch, error }) => {
   return (
     <>
       <AddRequestModal hideModal={hideModal} requestModal={requestModal}>
-        <AddRequestForm onFinish={addSettRequest} />
+        <AddRequestForm
+          users={users}
+          loading={usersLoading}
+          onFinish={addSettRequest}
+        />
       </AddRequestModal>
       <div className="top-box">
         <div className="create-btn">

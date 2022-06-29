@@ -9,7 +9,7 @@ const { Search } = Input;
 export const TopBox = ({
   searchText,
   btnText,
-  filterUsers = "",
+  getUsers = "",
   refetch = "",
   error = "",
   createUser = "",
@@ -23,42 +23,26 @@ export const TopBox = ({
     setAddModal(false);
   };
   // MODAL OPRATIONS END
-  
-  const onSearch = (value) => {
+
+  const removeEmptyFields = (value) => {
+    Object.keys(value).forEach((key) => {
+      console.log(value[key]);
+      if (value[key] === null || !value[key]) {
+        delete value[key];
+      }
+    });
+  };
+
+  const onSearch = async (value) => {
+    removeEmptyFields(value);
     try {
-      if(value.fullName != ""){
-      filterUsers({
+      await getUsers({
         variables: {
           filters: {
-            // username: value.username,
-            fullName: value.fullName,
-            // phoneNumber: value.phoneNumber,
-            // createdAt: value.createdAt,
+            ...value,
           },
         },
-      });} else if(value.phoneNumber != ""){
-        filterUsers({
-          variables: {
-            filters: {
-              // username: value.username,
-              // fullName: value.fullName,
-              phoneNumber: value.phoneNumber,
-              // createdAt: value.createdAt,
-            },
-          },
-        });
-      } else if (value.phoneNumber == "" && value.fullName == ""){
-        filterUsers({
-          variables: {
-            filters: {
-              // username: value.username,
-              // fullName: value.fullName,
-              phoneNumber: null,
-              // createdAt: value.createdAt,
-            },
-          },
-        });
-      }
+      });
     } catch (err) {
       if (error) {
         message.error(error?.message ? error?.message : "خطا مجددا تلاش کنید");
@@ -95,12 +79,12 @@ export const TopBox = ({
         <div className="search">
           {/* <Search placeholder={searchText} onSearch={onSearch} enterButton /> */}
 
-          <SearchUserForm 
-            onFinish={onSearch} 
-          />
-
+          <SearchUserForm onFinish={onSearch} />
         </div>
-        <div className="create-btn">
+        <div className="create-btn ">
+          <Button type="primary" onClick={() => getUsers()}>
+            همه کاربران
+          </Button>
           <Button type="primary" onClick={showModal}>
             {btnText}
           </Button>

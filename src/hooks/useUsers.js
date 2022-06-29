@@ -1,60 +1,31 @@
 import { useQuery, gql, useMutation, useLazyQuery } from "@apollo/client";
 
 // GET_USERS
+
+// get
 export const GET_USERS = gql`
-  query {
-    getUsers {
-      fullName
-      username
-      phoneNumber
-      wallet
-      rate
-      _id
-      # createdAt
-    }
-  }
-`;
-
-export const useGetUsers = () => {
-  const {
-    data: usersData,
-    loading: usersLoading,
-    error: usersError,
-    refetch,
-  } = useQuery(GET_USERS, {
-    manual: true,
-  });
-
-  return { usersData, usersLoading, usersError, refetch };
-};
-
-// for filter users
-export const FILTER_USERS = gql`
   query getUsers($filters: GetUsersQueryInput) {
     getUsers(filters: $filters) {
       fullName
       phoneNumber
-      # username
+      username
       # wallet
       # rate
-      # _id
+      _id
     }
   }
 `;
 
-export const useFilterUsers = (filters) => {
+export const useGetUsers = (filters) => {
   const [
-    filterUsers,
-    {
-      data: filterUsersData,
-      loading: filterUsersLoading,
-      error: filterUsersError,
-    },
-  ] = useLazyQuery(FILTER_USERS, {
+    getUsers,
+    { data: usersData, loading: usersLoading, error: usersError, refetch },
+  ] = useLazyQuery(GET_USERS, {
     variables: { filters: filters },
+    fetchPolicy: "no-cache",
   });
 
-  return { filterUsers, filterUsersData, filterUsersLoading, filterUsersError };
+  return { getUsers, usersData, usersLoading, usersError, refetch };
 };
 
 // GET_USERS END
@@ -148,22 +119,8 @@ export const useAddUser = (input) => {
 
 // EDIT USER
 export const editUser = gql`
-  mutation editUser(
-    $username: String
-    $fullName: String!
-    $wallet: Float!
-    $phoneNumber: String!
-    $userId: ID!
-  ) {
-    updateUserByAdmin(
-      input: {
-        username: $username
-        wallet: $wallet
-        fullName: $fullName
-        phoneNumber: $phoneNumber
-      }
-      userId: $userId
-    ) {
+  mutation editUser($input: UserByAdminInput, $userId: ID!) {
+    updateUserByAdmin(input: $input, userId: $userId) {
       _id
     }
   }

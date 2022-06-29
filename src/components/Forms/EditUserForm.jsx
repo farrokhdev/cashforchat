@@ -14,6 +14,7 @@ const validateMessages = {
 
 export const EditUserForm = ({
   userID,
+  form,
   singleUserData,
   refetch,
   updateUser,
@@ -21,13 +22,16 @@ export const EditUserForm = ({
   hideEditModal,
 }) => {
   const edit = async (value) => {
+    console.log(value);
     try {
       await updateUser({
         variables: {
           userId: userID,
-          username: value.username,
-          fullName: value.fullName,
-          phoneNumber: value.phoneNumber,
+          input: {
+            username: value.username,
+            fullName: value.fullName,
+            phoneNumber: value.phoneNumber,
+          },
         },
       }).then(() => {
         message.success("کاربر با موفقیت بروزرسانی شد");
@@ -45,11 +49,7 @@ export const EditUserForm = ({
       name="edit-user"
       onFinish={edit}
       validateMessages={validateMessages}
-      initialValues={{
-        username: singleUserData?.getUser.username,
-        fullName: singleUserData?.getUser.fullName,
-        phoneNumber: singleUserData?.getUser.phoneNumber,
-      }}
+      form={form}
     >
       <Form.Item
         name={"username"}

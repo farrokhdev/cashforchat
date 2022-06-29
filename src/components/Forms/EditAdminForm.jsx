@@ -21,38 +21,25 @@ export const EditAdminForm = ({
   update,
   editError,
   hideEditModal,
+  form,
 }) => {
-  useEffect(() => {
-    try {
-      getSingleAdmin({
-        variables: {
-          id: AdminID,
-        },
-      }).then(() => {
-        singleRefetch();
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }, [AdminID]);
-
   const edit = async (value) => {
-    console.log(value);
     try {
       await update({
         variables: {
           id: AdminID,
-         input:{
-          username: value.username,
-          name: value.name,
-          family: value.family,
-          password: value.password,
-          phoneNumber: value.phoneNumber,
-         }
+          input: {
+            username: value.username,
+            name: value.name,
+            family: value.family,
+            password: value.password,
+            phoneNumber: value.phoneNumber,
+          },
         },
       }).then(() => {
         message.success("کاربر با موفقیت بروزرسانی شد");
         hideEditModal();
+        form.resetFields();
         refetch();
       });
     } catch (err) {
@@ -64,14 +51,9 @@ export const EditAdminForm = ({
   return (
     <Form
       name="edit-user"
+      form={form}
       onFinish={edit}
       validateMessages={validateMessages}
-      initialValues={{
-        username: singleAdminData?.getAdmin.username,
-        name: singleAdminData?.getAdmin.name,
-        family: singleAdminData?.getAdmin.family,
-        phoneNumber: singleAdminData?.getAdmin.phoneNumber,
-      }}
     >
       <Form.Item
         name={"name"}

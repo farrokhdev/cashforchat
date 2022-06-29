@@ -4,7 +4,6 @@ import { Button, Form, message, Popconfirm, Spin, Typography } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import "../../assets/styles/table.scss";
 import {
-  useFilterUsers,
   useGetUsers,
   useAddUser,
   useDeleteUser,
@@ -18,11 +17,21 @@ import { useNavigate } from "react-router";
 import CurrencyFormat from "react-currency-format";
 
 export const UsersComp = () => {
+  // form validation
+  const [form] = Form.useForm();
+  const [editForm] = Form.useForm();
+  // form validation end
   // CRUD OPRATIONS
-  const { usersData, usersLoading, usersError, refetch } = useGetUsers();
+  const { getUsers, usersData, usersLoading, usersError, refetch } =
+    useGetUsers();
 
-  const { filterUsers, filterUsersData, filterUsersLoading, filterUsersError } =
-    useFilterUsers();
+  const getAllUsers = async () => {
+    await getUsers();
+  };
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
   const { createUser, addData, addLoading, addError } = useAddUser();
   const { removeUser, deleteData, deleteLoading, deleteError } =
     useDeleteUser();
@@ -151,22 +160,27 @@ export const UsersComp = () => {
 
   // EDIT MODAL
   const [editModal, setEditModal] = useState(false);
-  const showEditModal = (record) => {
-    setUserId(record._id);
-    setEditModal(true);
-  };
 
-  useEffect(() => {
+  const getUser = async (id) => {
     try {
-      getSingleUser({
+      await getSingleUser({
         variables: {
-          id: userID,
+          id: id,
         },
-      }).then(() => {});
+      }).then((res) => {
+        setUserId(id);
+        editForm.setFieldsValue({
+          ...res?.data?.getUser,
+        });
+      });
     } catch (err) {
       console.log(err);
     }
-  }, [userID]);
+  };
+  const showEditModal = (record) => {
+    getUser(record._id);
+    setEditModal(true);
+  };
 
   const hideEditModal = () => {
     setEditModal(false);
@@ -175,10 +189,6 @@ export const UsersComp = () => {
   // EDIT MODAL END
 
   // TABLE ACTIONS END
-
-  // form validation
-  const [form] = Form.useForm();
-  // form validation end
 
   // NAVIGATE HANDLER
   const Navigate = useNavigate();
@@ -225,6 +235,7 @@ export const UsersComp = () => {
         ) : (
           <EditUserForm
             userID={userID}
+            form={editForm}
             singleUserData={singleUserData}
             refetch={refetch}
             updateUser={updateUser}
@@ -237,20 +248,16 @@ export const UsersComp = () => {
       <TopBox
         searchText={"جستجو کاربر ..."}
         btnText={"ایجاد کاربر جدید"}
-        filterUsers={filterUsers}
+        getUsers={getUsers}
         refetch={refetch}
-        data={filterUsersData}
+        data={usersData}
         createUser={createUser}
       />
       <DefaultTable
         form={form}
-        data={
-          filterUsersData?.getUsers?.length
-            ? filterUsersData?.getUsers
-            : usersData?.getUsers
-        }
+        data={usersData?.getUsers}
         columns={columns}
-        loading={filterUsersLoading ? filterUsersLoading : usersLoading}
+        loading={usersLoading}
         error={usersError}
         footer={footer}
       />

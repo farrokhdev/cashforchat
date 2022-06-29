@@ -26,6 +26,11 @@ import EditAdminModal from "../modals/EditAdminModal";
 import { EditAdminForm } from "../Forms/EditAdminForm";
 
 export const AdminsComp = () => {
+  // form validation
+  const [form] = Form.useForm();
+  const [editForm] = Form.useForm();
+  // form validation end
+
   // CRUD OPRATIONS
   const { adminsData, adminsLoading, adminsError, adminRefetch } =
     useGetAdmins();
@@ -131,7 +136,7 @@ export const AdminsComp = () => {
           id: record._id,
         },
       }).then(() => {
-        message.success("کاربر با موفقیت حذف شد");
+        message.success("ادمین با موفقیت حذف شد");
         adminRefetch();
       });
     } catch (err) {
@@ -146,8 +151,27 @@ export const AdminsComp = () => {
 
   // EDIT MODAL
   const [editModal, setEditModal] = useState(false);
+
+  // get single admin data
+  const getAdmin = async (id) => {
+    try {
+      await getSingleAdmin({
+        variables: {
+          id: id,
+        },
+      }).then((res) => {
+        console.log(res.data.getAdmin);
+        setAdminID(id);
+        editForm.setFieldsValue({
+          ...res?.data?.getAdmin,
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const showEditModal = (record) => {
-    setAdminID(record._id);
+    getAdmin(record._id);
     setEditModal(true);
   };
 
@@ -158,10 +182,6 @@ export const AdminsComp = () => {
   // EDIT MODAL END
 
   // TABLE ACTIONS END
-
-  // form validation
-  const [form] = Form.useForm();
-  // form validation end
 
   return (
     <>
@@ -177,6 +197,7 @@ export const AdminsComp = () => {
           </>
         ) : (
           <EditAdminForm
+            form={editForm}
             AdminID={AdminID}
             singleAdminData={singleAdminData}
             getSingleAdmin={getSingleAdmin}

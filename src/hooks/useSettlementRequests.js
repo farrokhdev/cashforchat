@@ -122,25 +122,13 @@ export const useFinish = (id, input) => {
 const ADD_SETTLEMENT = gql`
   mutation addSettlement($input: SettlementRequestByAdminInput) {
     createSettlementRequestByAdmin(input: $input) {
-      userId {
-        _id
-        username
-        phoneNumber
-        fullName
-        enable
-      }
       amount
-      shebaNo
-      creditCardNo
-      bankName
-      status
-      description
     }
   }
 `;
 export const useAddSettlement = (input) => {
   const [
-    addSettlement,
+    addNewSettlement,
     {
       data: addSettlementData,
       error: addSettlementError,
@@ -151,7 +139,7 @@ export const useAddSettlement = (input) => {
   });
 
   return {
-    addSettlement,
+    addNewSettlement,
     addSettlementError,
     addSettlementData,
     addSettlementLoading,
