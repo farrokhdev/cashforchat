@@ -15,19 +15,6 @@ export const MobileSlider = () => {
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo">
           <img src={Logo} alt="" />
-
-          <h1
-            className="logo-text"
-            style={{
-              visibility: `${collapsed ? "hidden" : "visible"}`,
-              opacity: `${collapsed ? "0" : "1"}`,
-              width: `${collapsed ? "0px" : "100%"}`,
-              height: `${collapsed ? "0px" : "100%"}`,
-              transform: `translateX(${collapsed ? "100%" : "0"})`,
-            }}
-          >
-            سامانه ...
-          </h1>
         </div>
 
         <Menu

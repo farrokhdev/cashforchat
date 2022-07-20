@@ -201,7 +201,9 @@ export const UsersComp = () => {
 
   //footer
   let Wallet = [];
-  usersData?.getUsers?.map((amount) => Wallet.push(amount?.wallet));
+  usersData?.getUsers?.map((user) => Wallet.push(user?.wallet));
+
+  console.log(usersData);
   const footer = () => {
     let amountAll = Wallet.reduce(function (a, b) {
       return a + b;

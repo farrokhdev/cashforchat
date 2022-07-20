@@ -9,7 +9,7 @@ export const GET_USERS = gql`
       fullName
       phoneNumber
       username
-      # wallet
+      wallet
       # rate
       _id
     }

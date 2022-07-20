@@ -36,19 +36,6 @@ export const Template = ({ children }) => {
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo">
           <img src={Logo} alt="" />
-
-          <h1
-            className="logo-text"
-            style={{
-              visibility: `${collapsed ? "hidden" : "visible"}`,
-              opacity: `${collapsed ? "0" : "1"}`,
-              width: `${collapsed ? "0px" : "100%"}`,
-              height: `${collapsed ? "0px" : "100%"}`,
-              transform: `translateX(${collapsed ? "100%" : "0"})`,
-            }}
-          >
-            سامانه ...
-          </h1>
         </div>
 
         <Menu
@@ -106,12 +93,15 @@ export const Template = ({ children }) => {
           >
             <Link to="/user-calls">تماس های کاربران</Link>
           </Menu.Item>
-          <Menu.Item 
+          <Menu.Item
             className={
-              location?.pathname === "/settlement-requests" ? "ant-menu-item-selected" : ""
+              location?.pathname === "/settlement-requests"
+                ? "ant-menu-item-selected"
+                : ""
             }
-            key="6" 
-            icon={<DollarCircleOutlined />}>
+            key="6"
+            icon={<DollarCircleOutlined />}
+          >
             <Link to="/settlement-requests">درخواست تسویه</Link>
           </Menu.Item>
           <Menu.Item
